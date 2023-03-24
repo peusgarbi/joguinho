@@ -1,4 +1,8 @@
-local answer
+local logoArchive = io.open('images/logo.txt', 'r')
+local logo = logoArchive:read("*all")
+logoArchive:close()
+print(logo)
+
 repeat
    io.write("Digite seu nickname: ")
    io.flush()
