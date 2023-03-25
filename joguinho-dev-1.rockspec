@@ -10,17 +10,7 @@ description = {
       LuaRocks
    ]],
 }
-test_dependencies = {
-   "lsqlite3",
-}
-test = {
-   type = "busted",
-   platforms = {
-      windows = {
-         flags = { "--exclude-tags=ssh,git,unix", "-Xhelper", "lua_dir=$(LUA_DIR)", "-Xhelper", "lua_interpreter=$(LUA)" }
-      },
-      unix = {
-         flags = { "--exclude-tags=ssh,git", "-Xhelper", "lua_dir=$(LUA_DIR)", "-Xhelper", "lua_interpreter=$(LUA)" }
-      }
-   }
+dependencies = {
+   "lua >= 5.1",
+   "lsqlite3complete",
 }

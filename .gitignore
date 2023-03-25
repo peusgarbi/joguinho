@@ -1,1 +1,4 @@
-dependencies
+dependencies/luarocks
+/lua
+/lua_modules
+/.luarocks

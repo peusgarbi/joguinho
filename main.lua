@@ -3,6 +3,9 @@ local logo = logoArchive:read("*all")
 logoArchive:close()
 print(logo)
 
+local db = require('infra.database.sqlite.db')
+db.prepareDatabase()
+
 repeat
    io.write("Digite seu nickname: ")
    io.flush()
