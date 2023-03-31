@@ -7,6 +7,7 @@ use std::thread;
 use std::time::Duration;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use console::{Term, style};
+use indicatif::ProgressBar;
 
 
 fn print_logo() -> std::io::Result<()> {
@@ -38,6 +39,14 @@ fn main() {
         .interact()
         .unwrap()
     {
+        let deps = 100;
+        let pb = ProgressBar::new(deps);
+        for _ in 0..deps {
+            pb.inc(1);
+            thread::sleep(Duration::from_millis(10));
+        }
+        pb.finish_and_clear();
+
         println!("Olá, {}, tudo bem com você?", style(nickname.trim_end()).yellow());
         println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").green());
     } else {
