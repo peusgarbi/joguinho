@@ -1,0 +1,25 @@
+name: Testar Aplicação Rust
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  cargo-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Git Checkout
+      uses: actions/checkout@v3
+    
+    - name: Teste de compilação da aplicação
+      run: cargo build --verbose
+
+    - name: Testando a aplicação
+      run: cargo test --verbose
+
+    - name: Rodando benchmark da aplicação
+      run: cargo bench --verbose
