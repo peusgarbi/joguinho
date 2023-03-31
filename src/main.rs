@@ -3,7 +3,10 @@
 use std::fs::File;
 use std::io::{self, Read};
 use std::io::prelude::*;
-use dialoguer::{theme::ColorfulTheme, Confirm};
+use std::thread;
+use std::time::Duration;
+use dialoguer::{theme::ColorfulTheme, Confirm, Input};
+use console::{Term, style};
 
 
 fn print_logo() -> std::io::Result<()> {
@@ -20,12 +23,13 @@ fn print_logo() -> std::io::Result<()> {
 
 fn main() {
     print_logo();
-    println!("Digite seu nickname: ");
-    let mut nickname = String::new();
-    io::stdin()
-        .read_line(&mut nickname)
-        .expect("Não foi possível ler seu nickname!");
+    let terminal = Term::stdout();
     
+    let nickname: String = Input::with_theme(&ColorfulTheme::default())
+        .with_prompt("Digite seu nickname:")
+        .interact_text()
+        .unwrap();
+
     if Confirm::with_theme(&ColorfulTheme::default())
         .with_prompt("Deseja prosseguir no jogo?")
         .default(true)
@@ -34,9 +38,9 @@ fn main() {
         .interact()
         .unwrap()
     {
-        println!("Olá, {}, tudo bem com você?", nickname.trim_end());
-        println!("O jogo ainda está em desenvolvimento, mas você pode contribuir!");
+        println!("Olá, {}, tudo bem com você?", style(nickname.trim_end()).yellow());
+        println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").green());
     } else {
-        println!("Jogo abortado :(");
+        println!("{}", style("Jogo abortado :(").red());
     }
 }
