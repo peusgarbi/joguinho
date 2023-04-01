@@ -1,10 +1,10 @@
 FROM alpine:latest as builder
 RUN apk update && apk add --no-cache cargo
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /app
+COPY . .
 RUN cargo build --release
 
-FROM alpine:latest as runtime
-RUN apk update && apk add libgcc
-COPY --from=builder /usr/src/app/target/release/joguinho /usr/bin/joguinho
+FROM alpine:latest
+RUN apk update && apk add --no-cache libgcc
+COPY --from=builder /app/target/release/joguinho /usr/bin/joguinho
 CMD ["joguinho"]
