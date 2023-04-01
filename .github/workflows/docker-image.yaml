@@ -24,6 +24,8 @@ jobs:
         export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
         echo $VERSION
 
+    - name: version?
+      run: echo $VERSION
     # - name: Docker Login, Push to Hub, Logout
     #   env:
     #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
