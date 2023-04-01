@@ -14,18 +14,22 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v3
 
-    - name: Build the Docker Image    
+    # - name: Build the Docker Image
+    #   run: |
+    #     export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
+    #     docker build -t peusgarbi/joguinho:$VERSION -t peusgarbi/joguinho:latest .
+
+    - name: test VERSION
       run: |
         export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
-        docker build -t peusgarbi/joguinho:$VERSION -t peusgarbi/joguinho:latest .
+        echo $VERSION
 
-    - name: Docker Login, Push to Hub, Logout
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-      run: |
-        echo $DOCKERHUB_PASSWORD
-        docker login -u $DOCKERHUB_USERNAME --password-stdin
-        docker push peusgarbi/joguinho:$VERSION
-        docker push peusgarbi/joguinho:latest
-        docker logout
+    # - name: Docker Login, Push to Hub, Logout
+    #   env:
+    #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+    #     DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    #   run: |
+    #     docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+    #     docker push peusgarbi/joguinho:$VERSION
+    #     docker push peusgarbi/joguinho:latest
+    #     docker logout
