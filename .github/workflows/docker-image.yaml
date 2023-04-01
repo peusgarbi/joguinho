@@ -4,25 +4,26 @@ on:
   push:
     branches: [ "main" ]
 
-env:
-  IMAGE_TAG: ${{ github.sha }}
-
 jobs:
-  build:
+  docker-build-and-push:
     runs-on: ubuntu-latest
 
     steps:
     - name: Git Checkout
       uses: actions/checkout@v3
 
-    - name: Build the Docker Image    
-      run: docker build -t peusgarbi/joguinho:$IMAGE_TAG .
+    - name: Build the Docker Image
+      run: |
+        export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
+        docker build -t peusgarbi/joguinho:$VERSION -t peusgarbi/joguinho:latest .
 
     - name: Docker Login, Push to Hub, Logout
       env:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       run: |
+        export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
         docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-        docker push peusgarbi/joguinho:$IMAGE_TAG
+        docker push peusgarbi/joguinho:$VERSION
+        docker push peusgarbi/joguinho:latest
         docker logout
