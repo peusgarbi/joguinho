@@ -5,6 +5,7 @@ use std::io::{self, Read};
 use std::io::prelude::*;
 use std::{thread, env};
 use std::time::Duration;
+use dotenv::dotenv;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use console::{Term, style};
 use indicatif::ProgressBar;
@@ -28,6 +29,7 @@ fn print_logo() -> std::io::Result<()> {
 }
 
 fn main() {
+    dotenv().ok();
     print_logo();
     let terminal = Term::stdout();
     
