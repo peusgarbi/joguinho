@@ -3,7 +3,7 @@
 use std::fs::File;
 use std::io::{self, Read};
 use std::io::prelude::*;
-use std::thread;
+use std::{thread, env};
 use std::time::Duration;
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use console::{Term, style};
@@ -11,8 +11,13 @@ use indicatif::ProgressBar;
 
 
 fn print_logo() -> std::io::Result<()> {
+    let images_dir = match env::var("IMAGES_DIR") {
+        Ok(val) => val,
+        Err(e) => panic!("Erro ao obter o caminho até a pasta de imagens: {}", e),
+    };
+    let logo_dir = format!("{}/logo.txt", images_dir);
     // Abra o arquivo
-    let mut file = File::open("src/images/logo.txt")?;
+    let mut file = File::open(logo_dir)?;
     // Crie um buffer
     let mut contents = String::new();
     // Leia o conteúdo do arquivo

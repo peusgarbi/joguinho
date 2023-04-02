@@ -1,3 +1,4 @@
 dependencies
 .vscode
 target
+.env
