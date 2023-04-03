@@ -21,7 +21,7 @@ fn print_logo() -> std::io::Result<()> {
     // Leia o conteúdo do arquivo
     file.read_to_string(&mut contents)?;
     // Imprima o conteúdo no console
-    println!("{}", contents);
+    println!("{}", style(contents).color256(2));
     Ok(())
 }
 
@@ -29,13 +29,19 @@ fn main() {
     dotenv().ok();
     print_logo();
     let terminal = Term::stdout();
+    let nickname_prompt = format!("{}", style("Digite seu nickname:").color256(97));
     let nickname: String = Input::with_theme(&ColorfulTheme::default())
-        .with_prompt("Digite seu nickname:")
+        .with_prompt(nickname_prompt)
         .interact_text()
         .unwrap();
 
+    let welcome_speach = format!("{}{}{}", style("Olá, ").blue(), style(nickname.trim_end()).yellow(), style(", tudo bem com você?").blue());
+    println!("{}", welcome_speach);
+    println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").yellow());
+
+    let are_you_sure_prompt = format!("{}", style("Deseja prosseguir no jogo?").color256(97));
     if Confirm::with_theme(&ColorfulTheme::default())
-        .with_prompt("Deseja prosseguir no jogo?")
+        .with_prompt(are_you_sure_prompt)
         .default(true)
         .show_default(false)
         .wait_for_newline(true)
@@ -50,9 +56,9 @@ fn main() {
         }
         pb.finish_and_clear();
 
-        println!("Olá, {}, tudo bem com você?", style(nickname.trim_end()).yellow());
-        println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").red());
-        println!("");
+
+        
+
         introduction::introduction();
     } else {
         println!("{}", style("Jogo abortado :(").red());
