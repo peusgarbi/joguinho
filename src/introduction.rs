@@ -1,13 +1,23 @@
 use std::{thread, time, env, io::Write};
 use dialoguer::{console::{Term, style}, theme::ColorfulTheme, Select};
+use termion::{async_stdin, event::Key, input::TermRead};
     
 fn explication() {
     let text = "Você é um jovem seminarista prestes a se formar Padre da Igreja Católica Apostólica Romana no auge do século XIII. Ao olhar para o seu passado, questões vem a sua cabeça se você tomou as melhores decisões...";
-    
+    let mut time = 30;
+    let mut stdin = async_stdin().keys();
+
     for c in text.chars() {
         print!("{}", style(c).color256(208));
         std::io::stdout().flush().expect("Flushing to succeed");
-        std::thread::sleep(std::time::Duration::from_millis(30));
+        std::thread::sleep(std::time::Duration::from_millis(time));
+
+        if let Some(_) = stdin.next() {
+            println!("{}", style("Pulando texto...").black());
+            println!("{}", style(text).color256(208));
+            break;
+        }
+
     }
     println!("");
 }

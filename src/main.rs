@@ -6,6 +6,7 @@ use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use dotenv::dotenv;
 use indicatif::ProgressBar;
 mod introduction;
+mod menu;
 
 
 fn print_logo() -> std::io::Result<()> {
@@ -28,6 +29,7 @@ fn print_logo() -> std::io::Result<()> {
 fn main() {
     dotenv().ok();
     print_logo();
+    menu::menu();
     let terminal = Term::stdout();
     let nickname_prompt = format!("{}", style("Digite seu nickname:").color256(97));
     let nickname: String = Input::with_theme(&ColorfulTheme::default())
@@ -60,6 +62,9 @@ fn main() {
         
 
         introduction::introduction();
+        println!("{}", style("Por enquanto o jogo acaba por aqui...").black());
+        println!("{}", style("Se você contribuir no desenvolvimento, as coisas vão progredir mais rápido!").black());
+        println!("{}{}!", style("Bora ajudar, ").black(), style(nickname.trim_end()).yellow());
     } else {
         println!("{}", style("Jogo abortado :(").red());
     }
