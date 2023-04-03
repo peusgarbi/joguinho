@@ -5,7 +5,7 @@ fn explication() {
     let text = "Você é um jovem seminarista prestes a se formar Padre da Igreja Católica Apostólica Romana no auge do século XIII. Ao olhar para o seu passado, questões vem a sua cabeça se você tomou as melhores decisões...";
     
     for c in text.chars() {
-        print!("{c}");
+        print!("{}", style(c).color256(208));
         std::io::stdout().flush().expect("Flushing to succeed");
         std::thread::sleep(std::time::Duration::from_millis(30));
     }
@@ -22,8 +22,9 @@ fn choices() -> std::io::Result<()> {
         "Você só se importa com o Poder e o Status que a instituição pode lhe oferecer.",
         ];
 
+    let selection_one_prompt = format!("{}", style("Por que você decidiu entrar na Igreja?").color256(97));
     let selection_one = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Por que você decidiu entrar na Igreja?")
+        .with_prompt(selection_one_prompt)
         .items(&reasons)
         .default(0)
         .interact_on_opt(&Term::stderr())?;
@@ -33,15 +34,14 @@ fn choices() -> std::io::Result<()> {
         None => println!("Usuário não selecionou uma opção!")
     }
 
-    println!("");
-
     let context = [
         "Você se dedicou muito ao estudo dos Demônios.",
         "Você se dedicou ao estudo da Liturgia."
     ];
 
+    let selection_two_prompt = format!("{}", style("Como foram seus primeiros anos de estudo?").color256(97));
     let selection_two = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Como foram seus primeiros anos de estudo?")
+        .with_prompt(selection_two_prompt)
         .items(&context)
         .default(0)
         .interact_on_opt(&Term::stderr())?;
