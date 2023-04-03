@@ -62,9 +62,9 @@ fn main() {
         
 
         introduction::introduction();
-        println!("{}", style("Por enquanto o jogo acaba por aqui...").black());
-        println!("{}", style("Se você contribuir no desenvolvimento, as coisas vão progredir mais rápido!").black());
-        println!("{}{}!", style("Bora ajudar, ").black(), style(nickname.trim_end()).yellow());
+        println!("{}", style("Por enquanto o jogo acaba por aqui...").color256(8));
+        println!("{}", style("Se você contribuir no desenvolvimento, as coisas vão progredir mais rápido!").color256(8));
+        println!("{}{}!", style("Bora ajudar, ").color256(8), style(nickname.trim_end()).yellow());
     } else {
         println!("{}", style("Jogo abortado :(").red());
     }
