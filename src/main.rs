@@ -1,14 +1,11 @@
 #![allow(unused)]
 
-use std::fs::File;
-use std::io::{self, Read};
-use std::io::prelude::*;
-use std::{thread, env};
-use std::time::Duration;
-use dotenv::dotenv;
-use dialoguer::{theme::ColorfulTheme, Confirm, Input};
+use std::{thread, env, fs::File, time::Duration, io::{self, Read, prelude::*}};
 use console::{Term, style};
+use dialoguer::{theme::ColorfulTheme, Confirm, Input};
+use dotenv::dotenv;
 use indicatif::ProgressBar;
+mod introduction;
 
 
 fn print_logo() -> std::io::Result<()> {
@@ -32,7 +29,6 @@ fn main() {
     dotenv().ok();
     print_logo();
     let terminal = Term::stdout();
-    
     let nickname: String = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Digite seu nickname:")
         .interact_text()
@@ -55,7 +51,9 @@ fn main() {
         pb.finish_and_clear();
 
         println!("Olá, {}, tudo bem com você?", style(nickname.trim_end()).yellow());
-        println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").green());
+        println!("{}", style("O jogo ainda está em desenvolvimento, mas você pode contribuir!").red());
+        println!("");
+        introduction::introduction();
     } else {
         println!("{}", style("Jogo abortado :(").red());
     }
