@@ -13,7 +13,7 @@ fn explication() {
         std::thread::sleep(std::time::Duration::from_millis(time));
 
         if let Some(_) = stdin.next() {
-            println!("{}", style("Pulando texto...").black());
+            println!("{}", style("Pulando texto...").color256(8));
             println!("{}", style(text).color256(208));
             break;
         }
