@@ -1,5 +1,7 @@
 use std::process::exit;
 use dialoguer::{console::{Term, style}, theme::ColorfulTheme, Select};
+use crate::ops;
+use crate::introduction;
 
 pub fn menu() -> std::io::Result<()> {
     let menu_choices = vec![
@@ -18,7 +20,7 @@ pub fn menu() -> std::io::Result<()> {
         .interact_on_opt(&Term::stderr())?;
 
     match menu {
-        Some(0) => println!(""),
+        Some(0) => new_game(),
         Some(1) => load_game(),
         Some(2) => instructions(),
         Some(3) => settings(),
@@ -29,10 +31,14 @@ pub fn menu() -> std::io::Result<()> {
     Ok(())
 }
 
+fn new_game() {
+    introduction::introduction();
+}
+
 fn load_game() {
     println!("");
-    println!("{}", style("- Você realmente achava que já conseguiamos salvar alguma coisa?").color256(193));
-    println!("");
+    println!("{}", style("- Ainda não conseguimos carregar nada, mas aí vão os dados salvos:").color256(193));
+    ops::read_saves();
     menu();
 }
 
