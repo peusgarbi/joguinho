@@ -14,7 +14,7 @@ jobs:
 
     - name: Build the Docker Image
       run: |
-        export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
+        export VERSION=$(sed -n '/^\[package\]/,/^\[/ s/version = "\(.*\)"/\1/p' Cargo.toml)
         docker build -t peusgarbi/joguinho:$VERSION -t peusgarbi/joguinho:latest .
 
     - name: Docker Login, Push to Hub, Logout
@@ -22,7 +22,7 @@ jobs:
         DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       run: |
-        export VERSION=$(sed -n 's/version = "\(.*\)"/\1/p' Cargo.toml)
+        export VERSION=$(sed -n '/^\[package\]/,/^\[/ s/version = "\(.*\)"/\1/p' Cargo.toml)
         docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
         docker push peusgarbi/joguinho:$VERSION
         docker push peusgarbi/joguinho:latest
