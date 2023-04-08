@@ -1,12 +1,20 @@
 #![allow(unused)]
 
+#[macro_use]
+extern crate diesel;
+
+mod menu;
+mod db;
+mod schema;
+mod models;
+mod ops;
+mod introduction;
+
 use std::{thread, env, fs::File, time::Duration, io::{self, Read, prelude::*}};
 use console::{Term, style};
 use dialoguer::{theme::ColorfulTheme, Confirm, Input};
 use dotenv::dotenv;
 use indicatif::ProgressBar;
-mod introduction;
-mod menu;
 
 
 fn print_logo() -> std::io::Result<()> {
@@ -28,6 +36,7 @@ fn print_logo() -> std::io::Result<()> {
 
 fn main() {
     dotenv().ok();
+    ops::run_migrations();
     print_logo();
     menu::menu();
     let terminal = Term::stdout();
@@ -58,14 +67,18 @@ fn main() {
         }
         pb.finish_and_clear();
 
-
+        let username = nickname.to_string();
+        ops::create_save(username);
         
 
         introduction::introduction();
         println!("{}", style("Por enquanto o jogo acaba por aqui...").color256(8));
         println!("{}", style("Se você contribuir no desenvolvimento, as coisas vão progredir mais rápido!").color256(8));
         println!("{}{}!", style("Bora ajudar, ").color256(8), style(nickname.trim_end()).yellow());
+        menu::menu();
     } else {
-        println!("{}", style("Jogo abortado :(").red());
+        println!("{}", style("Jogo abortado, retornando ao menu principal...").red());
+        println!("");
+        menu::menu();
     }
 }

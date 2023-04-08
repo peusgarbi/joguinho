@@ -5,3 +5,6 @@ docker-compose.yaml
 .gitignore
 .vscode
 target
+src/audios
+src/database/joguinho.db
+**/.keep
