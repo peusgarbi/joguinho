@@ -8,3 +8,7 @@ target
 src/audios
 src/database/joguinho.db
 **/.keep
+.env
+.env.example
+LICENSE
+README.md

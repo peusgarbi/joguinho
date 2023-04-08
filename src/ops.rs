@@ -1,3 +1,4 @@
+use std::process::exit;
 use crate::models::{NewSave, Save};
 use crate::db::establish_sqlite_connection;
 use diesel::prelude::*;
@@ -27,7 +28,7 @@ pub fn read_saves() {
     } else if results.len() == 1 {
         println!("{} {} {}", style("- Mostrando").blue(), style(results.len()).yellow(), style("jogo salvo:").blue());
         for video in results {
-            println!("> {:?}", video.username)
+            println!("[{}] {:?}", style(video.id).color256(193), style(video.username).color256(97))
         };
     } else {
         println!("{} {} {}", style("- Mostrando").blue(), style(results.len()).yellow(), style("jogos salvos:").blue());
@@ -42,7 +43,11 @@ pub fn run_migrations() {
     let connection = establish_sqlite_connection();
 
     match run_pending_migrations(&connection) {
-        Ok(()) => println!("Migrações bem-sucedidas"),
-        Err(e) => println!("Erro ao rodar migrações: {:?}", e),
+        Ok(()) => println!("{}", style("Migrações bem-sucedidas!").color256(193)),
+        Err(e) => {
+            println!("{} {:?}", style("Erro ao rodar migrações:").color256(130), style(e).yellow());
+            println!("{}", style("Abortando jogo devido a erro...").red());
+            exit(1);
+        },
     }
 }

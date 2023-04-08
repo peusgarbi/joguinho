@@ -12,6 +12,6 @@ ENV DATABASE_URL=/app/src/database/joguinho.db
 COPY ./migrations /app/migrations
 COPY ./src/images /app/src/images
 RUN mkdir /app/src/database
-VOLUME /app/src/database
 COPY --from=builder /app/target/release/joguinho /usr/bin/joguinho
+WORKDIR /app
 CMD ["joguinho"]
