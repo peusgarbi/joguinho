@@ -2,23 +2,19 @@ package config
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 )
 
 type environment struct {
-	TEXT_SPEED string `validate:"required,numeric"`
 }
 
 var Env *environment
 
 func init() {
 	godotenv.Load()
-	Env = &environment{
-		TEXT_SPEED: os.Getenv("TEXT_SPEED"),
-	}
+	Env = &environment{}
 
 	err := validator.New().Struct(Env)
 	if err != nil {

@@ -4,6 +4,7 @@ import (
 	"joguinho/game/menu"
 	"joguinho/game/utils"
 	"joguinho/schema"
+	"time"
 )
 
 var (
@@ -11,6 +12,9 @@ var (
 )
 
 func main() {
+	stopLoading := utils.Loading()
+	time.Sleep(5 * time.Second)
+	stopLoading()
 	utils.PrintLogo()
 	for {
 		if gameContext.NextGameFunction == nil {

@@ -2,8 +2,6 @@ package typer
 
 import (
 	"fmt"
-	"joguinho/config"
-	"strconv"
 	"time"
 
 	"github.com/eiannone/keyboard"
@@ -12,7 +10,7 @@ import (
 
 func TypeWriterPrint(text string, cor color.Attribute) {
 	c := color.New(cor)
-	textSpeed, _ := strconv.Atoi(config.Env.TEXT_SPEED)
+	textSpeed := 20
 	keysEvents, _ := keyboard.GetKeys(10)
 	defer keyboard.Close()
 
