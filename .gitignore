@@ -1,7 +1,2 @@
-dependencies
-.vscode
-target
+build
 .env
-src/audios
-src/database/joguinho.db
-**/.keep
