@@ -1,4 +1,4 @@
--- name: GetAllSaves :many
+-- name: ListAllSaves :many
 SELECT * FROM saves
 ORDER BY id ASC;
 
@@ -16,7 +16,10 @@ currency = ?
 WHERE id = ?
 RETURNING *;
 
--- name: GetSave :one
+-- name: GetSaveById :many
 SELECT * FROM saves
-WHERE id = ?
-LIMIT 1;
+WHERE id = ?;
+
+-- name: GetSaveByNickname :many
+SELECT * FROM saves
+WHERE nickname = ?;

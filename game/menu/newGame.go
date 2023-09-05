@@ -1,15 +1,17 @@
 package menu
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"joguinho/database/sqlite"
 	"joguinho/game/utils"
 	"joguinho/schema"
 	"joguinho/typer"
+	"time"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
-	"github.com/inancgumus/screen"
 )
 
 type reason string
@@ -54,8 +56,7 @@ func parseReasonStringToEnum(stringReason string) reason {
 }
 
 func NewGame(g *schema.GameContext) error {
-	screen.Clear()
-	screen.MoveTopLeft()
+	utils.CleanScreen()
 	err := survey.AskOne(
 		&survey.Input{
 			Message: "Qual o seu nome?",
@@ -65,6 +66,11 @@ func NewGame(g *schema.GameContext) error {
 			if ans.(string) == "" {
 				//lint:ignore ST1005 this error message should render as capitalized
 				return errors.New("Não é possível prosseguir sem nome!")
+			}
+			saveExists, _ := checkForExistingSave(ans.(string))
+			if saveExists {
+				//lint:ignore ST1005 this error message should render as capitalized
+				return errors.New("Já existe um save com esse nickname!")
 			}
 			return nil
 		}),
@@ -130,6 +136,29 @@ func NewGame(g *schema.GameContext) error {
 		return fmt.Errorf("erro ao criar seu save:\n%v", err)
 	}
 
-	g.NextGameFunction = MainMenu
+	g.NextGameFunction = EndOfContent
 	return nil
+}
+
+func checkForExistingSave(nickname string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	db, err := sqlite.LocalSqlite.Connect()
+	if err != nil {
+		return false, fmt.Errorf("erro em 'checkForExistingSave': não foi possível se conectar ao sqlite:\n%v", err)
+	}
+	defer db.Close()
+
+	queries := sqlite.New(db)
+	save, err := queries.GetSaveByNickname(ctx, nickname)
+	if err != nil {
+		return false, fmt.Errorf("erro em 'checkForExistingSave': não foi possível realizar a query:\n%v", err)
+	}
+
+	if len(save) == 0 {
+		return false, nil
+	} else {
+		return true, nil
+	}
 }

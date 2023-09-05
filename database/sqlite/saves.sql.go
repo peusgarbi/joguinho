@@ -29,13 +29,13 @@ func (q *Queries) CreateSave(ctx context.Context, arg CreateSaveParams) (Safe, e
 	return i, err
 }
 
-const getAllSaves = `-- name: GetAllSaves :many
+const getSaveById = `-- name: GetSaveById :many
 SELECT id, nickname, currency FROM saves
-ORDER BY id ASC
+WHERE id = ?
 `
 
-func (q *Queries) GetAllSaves(ctx context.Context) ([]Safe, error) {
-	rows, err := q.db.QueryContext(ctx, getAllSaves)
+func (q *Queries) GetSaveById(ctx context.Context, id int64) ([]Safe, error) {
+	rows, err := q.db.QueryContext(ctx, getSaveById, id)
 	if err != nil {
 		return nil, err
 	}
@@ -57,17 +57,60 @@ func (q *Queries) GetAllSaves(ctx context.Context) ([]Safe, error) {
 	return items, nil
 }
 
-const getSave = `-- name: GetSave :one
+const getSaveByNickname = `-- name: GetSaveByNickname :many
 SELECT id, nickname, currency FROM saves
-WHERE id = ?
-LIMIT 1
+WHERE nickname = ?
 `
 
-func (q *Queries) GetSave(ctx context.Context, id int64) (Safe, error) {
-	row := q.db.QueryRowContext(ctx, getSave, id)
-	var i Safe
-	err := row.Scan(&i.ID, &i.Nickname, &i.Currency)
-	return i, err
+func (q *Queries) GetSaveByNickname(ctx context.Context, nickname string) ([]Safe, error) {
+	rows, err := q.db.QueryContext(ctx, getSaveByNickname, nickname)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Safe{}
+	for rows.Next() {
+		var i Safe
+		if err := rows.Scan(&i.ID, &i.Nickname, &i.Currency); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const listAllSaves = `-- name: ListAllSaves :many
+SELECT id, nickname, currency FROM saves
+ORDER BY id ASC
+`
+
+func (q *Queries) ListAllSaves(ctx context.Context) ([]Safe, error) {
+	rows, err := q.db.QueryContext(ctx, listAllSaves)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Safe{}
+	for rows.Next() {
+		var i Safe
+		if err := rows.Scan(&i.ID, &i.Nickname, &i.Currency); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateSave = `-- name: UpdateSave :one
