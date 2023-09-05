@@ -4,7 +4,9 @@ import (
 	"joguinho/game/menu"
 	"joguinho/game/utils"
 	"joguinho/schema"
-	"time"
+	"joguinho/typer"
+
+	"github.com/inancgumus/screen"
 )
 
 var (
@@ -12,21 +14,25 @@ var (
 )
 
 func main() {
-	stopLoading := utils.Loading()
-	time.Sleep(5 * time.Second)
-	stopLoading()
-	utils.PrintLogo()
 	for {
+		err := utils.SaveGame(gameContext)
+		if err != nil {
+			typer.ErrorPrint("Erro ao tentar salvar seu jogo:", err)
+			break
+		}
 		if gameContext.NextGameFunction == nil {
 			break
 		}
-		err := gameContext.NextGameFunction(gameContext)
+		err = gameContext.CallNextGameFunction()
 		if err != nil {
-			panic(err)
+			typer.ErrorPrint("Erro ao tentar chamar a próxima parte do jogo:", err)
+			break
 		}
 	}
 }
 
 func init() {
-	gameContext.NextGameFunction = menu.MainMenu
+	screen.Clear()
+	screen.MoveTopLeft()
+	gameContext.NextGameFunction = menu.Initialization
 }

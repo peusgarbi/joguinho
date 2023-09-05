@@ -7,7 +7,9 @@ require (
 	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203
 	github.com/fatih/color v1.15.0
 	github.com/go-playground/validator/v10 v10.15.3
+	github.com/inancgumus/screen v0.0.0-20190314163918-06e984b86ed3
 	github.com/joho/godotenv v1.5.1
+	github.com/mattn/go-sqlite3 v1.14.17
 )
 
 require (

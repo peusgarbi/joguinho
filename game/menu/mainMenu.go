@@ -61,11 +61,3 @@ func CloseGame(g *schema.GameContext) error {
 	g.NextGameFunction = nil
 	return nil
 }
-
-func LoadGame(g *schema.GameContext) error {
-	c := color.New(color.FgHiYellow)
-	c.Println("- Ainda não é possível carregar nada!")
-	fmt.Println()
-	g.NextGameFunction = MainMenu
-	return nil
-}

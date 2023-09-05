@@ -36,3 +36,9 @@ func NormalPrint(text string, cor color.Attribute) {
 	c := color.New(cor)
 	c.Println(text)
 }
+
+func ErrorPrint(text string, err error) {
+	color.Red(text)
+	yellow := color.New(color.FgYellow)
+	yellow.Println(err)
+}

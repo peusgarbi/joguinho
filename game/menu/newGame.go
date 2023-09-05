@@ -3,11 +3,13 @@ package menu
 import (
 	"errors"
 	"fmt"
+	"joguinho/game/utils"
 	"joguinho/schema"
 	"joguinho/typer"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/fatih/color"
+	"github.com/inancgumus/screen"
 )
 
 type reason string
@@ -52,6 +54,8 @@ func parseReasonStringToEnum(stringReason string) reason {
 }
 
 func NewGame(g *schema.GameContext) error {
+	screen.Clear()
+	screen.MoveTopLeft()
 	err := survey.AskOne(
 		&survey.Input{
 			Message: "Qual o seu nome?",
@@ -119,6 +123,11 @@ func NewGame(g *schema.GameContext) error {
 	err = survey.Ask(questions, &answers)
 	if err != nil {
 		return fmt.Errorf("erro ao tentar pegar suas respostas:\n%v", err)
+	}
+
+	err = utils.CreateSave(g)
+	if err != nil {
+		return fmt.Errorf("erro ao criar seu save:\n%v", err)
 	}
 
 	g.NextGameFunction = MainMenu
